@@ -1,0 +1,9 @@
+{
+  "item.forgottenfauna.thylacine_spawn_egg": "Thylacine Spawn Egg",
+  "item.forgottenfauna.baiji_spawn_egg": "Baiji Spawn Egg",
+
+  "entity.forgottenfauna.thylacine": "Thylacine",
+  "entity.forgottenfauna.baiji": "Baiji",
+
+  "itemGroup.forgottenfauna": "Forgotten Fauna"
+}
