@@ -14,7 +14,7 @@ public class ResurrectionEventHandler {
     }
 
     public void tick() {
-        if (ticks > 0) {
+        if (isActive()) {
             --ticks;
         }
     }
