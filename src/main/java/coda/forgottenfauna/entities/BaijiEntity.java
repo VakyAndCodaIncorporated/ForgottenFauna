@@ -32,7 +32,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class BaijiEntity extends AnimalEntity {
+public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
     private static final EntityPredicate field_213810_bA = (new EntityPredicate()).setDistance(10.0D).allowFriendlyFire().allowInvulnerable().setLineOfSiteRequired();
 
     public BaijiEntity(EntityType<? extends BaijiEntity> type, World worldIn) {

@@ -27,7 +27,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
-public class DodoEntity extends AnimalEntity {
+public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
     private int cropTicks;
 
     public DodoEntity(EntityType<? extends AnimalEntity> type, World world) {

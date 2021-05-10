@@ -30,7 +30,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
-public class ThylacineEntity extends AnimalEntity {
+public class ThylacineEntity extends AnimalEntity implements IResurrectedEntity {
     private static final DataParameter<Boolean> STALKING = EntityDataManager.createKey(ThylacineEntity.class, DataSerializers.BOOLEAN);
 
     public ThylacineEntity(EntityType<? extends AnimalEntity> type, World world) {
