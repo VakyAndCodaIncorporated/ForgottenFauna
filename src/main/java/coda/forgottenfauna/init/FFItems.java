@@ -15,5 +15,6 @@ public class FFItems {
 
     // Spawn Eggs
     public static final RegistryObject<Item> THYLACINE_SPAWN_EGG = REGISTRY.register("thylacine_spawn_egg", () -> new ForgottenFaunaSpawnEggItem(FFEntities.THYLACINE, 0xdda15e, 0x4a2a26, new Item.Properties().group(ForgottenFauna.GROUP)));
-    public static final RegistryObject<Item> BAIJI_SPAWN_EGG = REGISTRY.register("baiji_spawn_egg", () -> new ForgottenFaunaSpawnEggItem(FFEntities.BAIJI, 0x7c8a9a, 0xd5d4cd, new Item.Properties().group(ForgottenFauna.GROUP)));
+    public static final RegistryObject<Item> BAIJI_SPAWN_EGG = REGISTRY.register("baiji_spawn_egg", () -> new ForgottenFaunaSpawnEggItem(FFEntities.BAIJI, 0x63636e, 0x98a7a0, new Item.Properties().group(ForgottenFauna.GROUP)));
+    public static final RegistryObject<Item> DODO_SPAWN_EGG = REGISTRY.register("dodo_spawn_egg", () -> new ForgottenFaunaSpawnEggItem(FFEntities.DODO, 0xabccda, 0xc7d1b7, new Item.Properties().group(ForgottenFauna.GROUP)));
 }

@@ -1,9 +1,18 @@
 {
   "item.forgottenfauna.thylacine_spawn_egg": "Thylacine Spawn Egg",
   "item.forgottenfauna.baiji_spawn_egg": "Baiji Spawn Egg",
+  "item.forgottenfauna.dodo_spawn_egg": "Dodo Spawn Egg",
 
   "entity.forgottenfauna.thylacine": "Thylacine",
   "entity.forgottenfauna.baiji": "Baiji",
+  "entity.forgottenfauna.dodo": "Dodo",
+
+  "forgottenfauna.thylacine.ambient": "Thylacine growls",
+  "forgottenfauna.thylacine.hurt": "Thylacine hurts",
+  "forgottenfauna.thylacine.death": "Thylacine dies",
+  "forgottenfauna.dodo.ambient": "Dodo coos",
+  "forgottenfauna.dodo.hurt": "Dodo hurts",
+  "forgottenfauna.dodo.death": "Dodo dies",
 
   "itemGroup.forgottenfauna": "Forgotten Fauna"
 }

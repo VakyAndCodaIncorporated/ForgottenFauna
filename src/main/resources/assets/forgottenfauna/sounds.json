@@ -1,0 +1,56 @@
+{
+  "thylacine.ambient": {
+    "subtitle": "forgottenfauna.thylacine.ambient",
+    "sounds": [
+      {
+        "name": "forgottenfauna:thylacine/ambient",
+        "streaming": true
+      }
+    ]
+  },
+  "thylacine.hurt": {
+    "subtitle": "forgottenfauna.thylacine.hurt",
+    "sounds": [
+      {
+        "name": "forgottenfauna:thylacine/hurt",
+        "streaming": true
+      }
+    ]
+  },
+  "thylacine.death": {
+    "subtitle": "forgottenfauna.thylacine.death",
+    "sounds": [
+      {
+        "name": "forgottenfauna:thylacine/death",
+        "streaming": true
+      }
+    ]
+  },
+  "dodo.ambient": {
+    "subtitle": "forgottenfauna.dodo.ambient",
+    "sounds": [
+      {
+        "name": "forgottenfauna:dodo/ambient",
+        "streaming": true
+      }
+    ]
+  },
+  "dodo.hurt": {
+    "subtitle": "forgottenfauna.dodo.hurt",
+    "sounds": [
+      {
+        "name": "forgottenfauna:dodo/hurt",
+        "streaming": true
+      }
+    ]
+  },
+  "dodo.death": {
+    "subtitle": "forgottenfauna.dodo.death",
+    "sounds": [
+      {
+        "name": "forgottenfauna:dodo/death",
+        "streaming": true
+      }
+    ]
+  }
+}

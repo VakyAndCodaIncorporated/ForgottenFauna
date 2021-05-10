@@ -2,17 +2,16 @@ package coda.forgottenfauna.entities;
 
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
+import coda.forgottenfauna.init.FFSounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.entity.passive.RabbitEntity;
-import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -26,12 +25,10 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
-import java.util.function.Predicate;
 
 public class ThylacineEntity extends AnimalEntity {
     private static final DataParameter<Boolean> STALKING = EntityDataManager.createKey(ThylacineEntity.class, DataSerializers.BOOLEAN);
@@ -42,7 +39,7 @@ public class ThylacineEntity extends AnimalEntity {
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
+        // this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(3, new FollowParentGoal(this, 1.25D));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.25D, Ingredient.fromItems(Items.RABBIT), true));
@@ -83,15 +80,15 @@ public class ThylacineEntity extends AnimalEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return null;
+        return FFSounds.THYLACINE_AMBIENT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return null;
+        return FFSounds.THYLACINE_DEATH.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource source) {
-        return null;
+        return FFSounds.THYLACINE_HURT.get();
     }
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
@@ -120,7 +117,6 @@ public class ThylacineEntity extends AnimalEntity {
 
     public void setStalking(boolean stalking) {
         this.dataManager.set(STALKING, stalking);
-        this.setAIMoveSpeed(0.00005F);
     }
 
     public void writeAdditional(CompoundNBT compound) {
@@ -147,6 +143,9 @@ public class ThylacineEntity extends AnimalEntity {
                 if (entity.getAttackTarget().getDistanceSq(entity) < 50.0D) {
                     entity.setStalking(true);
                 }
+            }
+            else {
+                entity.setStalking(false);
             }
             return super.shouldContinueExecuting();
         }

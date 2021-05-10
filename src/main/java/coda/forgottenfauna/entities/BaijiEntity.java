@@ -1,6 +1,5 @@
 package coda.forgottenfauna.entities;
 
-import coda.forgottenfauna.entities.goal.BaijiJumpGoal;
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
 import net.minecraft.entity.*;
@@ -11,9 +10,9 @@ import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -36,8 +35,8 @@ import java.util.*;
 public class BaijiEntity extends AnimalEntity {
     private static final EntityPredicate field_213810_bA = (new EntityPredicate()).setDistance(10.0D).allowFriendlyFire().allowInvulnerable().setLineOfSiteRequired();
 
-    public BaijiEntity(EntityType<? extends BaijiEntity> type, World worldIN) {
-        super(type, worldIN);
+    public BaijiEntity(EntityType<? extends BaijiEntity> type, World worldIn) {
+        super(type, worldIn);
         this.moveController = new BaijiEntity.MoveHelperController(this);
         this.lookController = new DolphinLookController(this, 10);
     }
@@ -61,15 +60,20 @@ public class BaijiEntity extends AnimalEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
         this.goalSelector.addGoal(1, new BaijiEntity.SwimWithPlayerGoal(this, 4.0D));
-        this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 1.0D, 10));
-        this.goalSelector.addGoal(2, new LookRandomlyGoal(this));
-        this.goalSelector.addGoal(3, new LookAtGoal(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.addGoal(4, new BaijiJumpGoal(this, 10));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, (double)1.2F, true));
-        this.goalSelector.addGoal(6, new FollowBoatGoal(this));
-        this.goalSelector.addGoal(7, new AvoidEntityGoal<>(this, GuardianEntity.class, 8.0F, 1.0D, 1.0D));
-        this.targetSelector.addGoal(0
-                , (new HurtByTargetGoal(this, GuardianEntity.class)).setCallsForHelp());
+        this.goalSelector.addGoal(2, new BreedGoal(this, 1.25D));
+        this.goalSelector.addGoal(3, new FollowParentGoal(this, 1.25D));
+        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
+        this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.2F, true));
+        this.goalSelector.addGoal(7, new FollowBoatGoal(this));
+        this.goalSelector.addGoal(8, new AvoidEntityGoal<>(this, GuardianEntity.class, 8.0F, 1.0D, 1.0D));
+        this.targetSelector.addGoal(0, (new HurtByTargetGoal(this, GuardianEntity.class)).setCallsForHelp());
+    }
+
+    @Override
+    public boolean isBreedingItem(ItemStack stack) {
+        return stack.getItem() == Items.SALMON;
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
