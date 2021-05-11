@@ -1,2 +1,4 @@
-package coda.forgottenfauna.entities;public interface IResurrectedEntity {
+package coda.forgottenfauna.entities;
+
+public interface IResurrectedEntity {
 }

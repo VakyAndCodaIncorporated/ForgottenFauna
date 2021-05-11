@@ -8,6 +8,7 @@ import coda.forgottenfauna.entities.DodoEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,5 +22,11 @@ public class DodoRenderer extends MobRenderer<DodoEntity, DodoModel<DodoEntity>>
 
     public ResourceLocation getEntityTexture(DodoEntity entity) {
         return TEXTURE;
+    }
+
+    protected float handleRotationFloat(DodoEntity livingBase, float partialTicks) {
+        float f = MathHelper.lerp(partialTicks, livingBase.oFlap, livingBase.wingRotation);
+        float f1 = MathHelper.lerp(partialTicks, livingBase.oFlapSpeed, livingBase.destPos);
+        return (MathHelper.sin(f) + 1.5F) * f1;
     }
 }

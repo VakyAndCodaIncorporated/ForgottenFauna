@@ -26,6 +26,15 @@
       }
     ]
   },
+  "thylacine.attack": {
+    "subtitle": "forgottenfauna.thylacine.attack",
+    "sounds": [
+      {
+        "name": "forgottenfauna:thylacine/attack",
+        "streaming": true
+      }
+    ]
+  },
   "dodo.ambient": {
     "subtitle": "forgottenfauna.dodo.ambient",
     "sounds": [
@@ -49,6 +58,24 @@
     "sounds": [
       {
         "name": "forgottenfauna:dodo/death",
+        "streaming": true
+      }
+    ]
+  },
+  "stellers_sea_cow.hurt": {
+    "subtitle": "forgottenfauna.stellers_sea_cow.hurt",
+    "sounds": [
+      {
+        "name": "forgottenfauna:stellers_sea_cow/hurt",
+        "streaming": true
+      }
+    ]
+  },
+  "stellers_sea_cow.death": {
+    "subtitle": "forgottenfauna.stellers_sea_cow.death",
+    "sounds": [
+      {
+        "name": "forgottenfauna:stellers_sea_cow/death",
         "streaming": true
       }
     ]

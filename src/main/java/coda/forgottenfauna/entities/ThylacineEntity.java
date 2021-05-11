@@ -69,6 +69,7 @@ public class ThylacineEntity extends AnimalEntity implements IResurrectedEntity 
         boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)((int)this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
         if (flag) {
             this.applyEnchantments(this, entityIn);
+            playSound(FFSounds.THYLACINE_ATTACK.get(), 0.4F, 1.0F);
         }
 
         ThylacineEntity attacker = this;
@@ -99,11 +100,6 @@ public class ThylacineEntity extends AnimalEntity implements IResurrectedEntity 
     @Override
     public AgeableEntity func_241840_a(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
         return FFEntities.THYLACINE.get().create(p_241840_1_);
-    }
-
-    @Override
-    public boolean isBreedingItem(ItemStack stack) {
-        return stack.getItem() == Items.RABBIT;
     }
 
     protected void registerData() {

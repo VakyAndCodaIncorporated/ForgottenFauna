@@ -3,6 +3,7 @@ package coda.forgottenfauna.client;
 import coda.forgottenfauna.ForgottenFauna;
 import coda.forgottenfauna.client.renderer.BaijiRenderer;
 import coda.forgottenfauna.client.renderer.DodoRenderer;
+import coda.forgottenfauna.client.renderer.StellersSeaCowRenderer;
 import coda.forgottenfauna.client.renderer.ThylacineRenderer;
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.items.ForgottenFaunaSpawnEggItem;
@@ -23,6 +24,7 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(FFEntities.THYLACINE.get(), ThylacineRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(FFEntities.BAIJI.get(), BaijiRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(FFEntities.DODO.get(), DodoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(FFEntities.STELLERS_SEA_COW.get(), StellersSeaCowRenderer::new);
     }
 
     @SubscribeEvent

@@ -13,7 +13,10 @@ public class FFSounds {
     public static final RegistryObject<SoundEvent> THYLACINE_HURT = REGISTRY.register("thylacine_hurt", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "thylacine.hurt")));
     public static final RegistryObject<SoundEvent> THYLACINE_AMBIENT = REGISTRY.register("thylacine_ambient", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "thylacine.ambient")));
     public static final RegistryObject<SoundEvent> THYLACINE_DEATH = REGISTRY.register("thylacine_death", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "thylacine.death")));
+    public static final RegistryObject<SoundEvent> THYLACINE_ATTACK = REGISTRY.register("thylacine_attack", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "thylacine.attack")));
     public static final RegistryObject<SoundEvent> DODO_HURT = REGISTRY.register("dodo_hurt", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "dodo.hurt")));
     public static final RegistryObject<SoundEvent> DODO_AMBIENT = REGISTRY.register("dodo_ambient", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "dodo.ambient")));
     public static final RegistryObject<SoundEvent> DODO_DEATH = REGISTRY.register("dodo_death", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "dodo.death")));
+    public static final RegistryObject<SoundEvent> STELLERS_SEA_COW_HURT = REGISTRY.register("stellers_sea_cow_hurt", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "stellers_sea_cow.hurt")));
+    public static final RegistryObject<SoundEvent> STELLERS_SEA_COW_DEATH = REGISTRY.register("stellers_sea_cow_death", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "stellers_sea_cow.death")));
 }

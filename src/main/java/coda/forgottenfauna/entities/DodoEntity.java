@@ -20,7 +20,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -29,6 +31,11 @@ import javax.annotation.Nullable;
 
 public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
     private int cropTicks;
+    public float wingRotation;
+    public float destPos;
+    public float oFlapSpeed;
+    public float oFlap;
+    public float wingRotDelta = 1.0F;
 
     public DodoEntity(EntityType<? extends AnimalEntity> type, World world) {
         super(type, world);
@@ -84,9 +91,27 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
         return FFEntities.DODO.get().create(p_241840_1_);
     }
 
-    @Override
-    public boolean isBreedingItem(ItemStack stack) {
-        return stack.getItem() == Items.MELON_SLICE;
+    public void livingTick() {
+        super.livingTick();
+        this.oFlap = this.wingRotation;
+        this.oFlapSpeed = this.destPos;
+        this.destPos = (float)((double)this.destPos + (double)(this.onGround ? -1 : 4) * 0.3D);
+        this.destPos = MathHelper.clamp(this.destPos, 0.0F, 1.0F);
+        if (!this.onGround && this.wingRotDelta < 1.0F) {
+            this.wingRotDelta = 1.0F;
+        }
+
+        this.wingRotDelta = (float)((double)this.wingRotDelta * 0.9D);
+        Vector3d vector3d = this.getMotion();
+        if (!this.onGround && vector3d.y < 0.0D) {
+            this.setMotion(vector3d.mul(1.0D, 0.6D, 1.0D));
+        }
+
+        this.wingRotation += this.wingRotDelta * 2.0F;
+    }
+
+    public boolean onLivingFall(float distance, float damageMultiplier) {
+        return false;
     }
 
     private boolean isCropEaten() {

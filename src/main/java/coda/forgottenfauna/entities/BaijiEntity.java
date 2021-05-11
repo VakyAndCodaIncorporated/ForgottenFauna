@@ -2,6 +2,7 @@ package coda.forgottenfauna.entities;
 
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -19,11 +20,13 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -57,6 +60,10 @@ public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
         return true;
     }
 
+    public static boolean canBaijiSpawn(EntityType<? extends AnimalEntity> type, IWorld worldIn, SpawnReason reason, BlockPos p_223363_3_, Random randomIn) {
+        return worldIn.getBlockState(p_223363_3_).isIn(Blocks.WATER) && worldIn.getBlockState(p_223363_3_.up()).isIn(Blocks.WATER);
+    }
+
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
         this.goalSelector.addGoal(1, new BaijiEntity.SwimWithPlayerGoal(this, 4.0D));
@@ -69,11 +76,6 @@ public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
         this.goalSelector.addGoal(7, new FollowBoatGoal(this));
         this.goalSelector.addGoal(8, new AvoidEntityGoal<>(this, GuardianEntity.class, 8.0F, 1.0D, 1.0D));
         this.targetSelector.addGoal(0, (new HurtByTargetGoal(this, GuardianEntity.class)).setCallsForHelp());
-    }
-
-    @Override
-    public boolean isBreedingItem(ItemStack stack) {
-        return stack.getItem() == Items.SALMON;
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
@@ -171,6 +173,11 @@ public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
         return SoundEvents.ENTITY_DOLPHIN_SWIM;
     }
 
+    @Override
+    public boolean isPushedByWater() {
+        return false;
+    }
+
     public void travel(Vector3d travelVector) {
         if (this.isServerWorld() && this.isInWater()) {
             this.moveRelative(this.getAIMoveSpeed(), travelVector);
@@ -213,7 +220,7 @@ public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
                     float f1 = (float)(this.speed * this.baiji.getAttributeValue(Attributes.MOVEMENT_SPEED));
                     if (this.baiji.isInWater()) {
                         this.baiji.setAIMoveSpeed(f1 * 0.02F);
-                        float f2 = -((float)(MathHelper.atan2(d1, (double)MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
+                        float f2 = -((float)(MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
                         f2 = MathHelper.clamp(MathHelper.wrapDegrees(f2), -85.0F, 85.0F);
                         this.baiji.rotationPitch = this.limitAngle(this.baiji.rotationPitch, f2, 5.0F);
                         float f3 = MathHelper.cos(this.baiji.rotationPitch * ((float)Math.PI / 180F));

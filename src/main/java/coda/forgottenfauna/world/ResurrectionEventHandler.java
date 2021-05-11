@@ -10,7 +10,6 @@ public class ResurrectionEventHandler {
     }
 
     public boolean isActive() {
-        // System.out.println("Resurrection is active!");
         return ticks > 0;
     }
 

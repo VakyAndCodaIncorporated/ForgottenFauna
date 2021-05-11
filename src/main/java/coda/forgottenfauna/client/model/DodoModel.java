@@ -104,8 +104,8 @@ public class DodoModel<T extends Entity> extends AgeableModel<DodoEntity> {
         this.neck.rotateAngleX = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.2F * limbSwingAmount + 0.05F;
         this.tail.rotateAngleX = MathHelper.cos(limbSwing * speed * 0.4F) * degree * 0.2F * limbSwingAmount;
         this.tail.rotationPointY = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.05F * limbSwingAmount -1.0F;
-        this.wingRight.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.4F) * degree * 0.5F * limbSwingAmount + 0.2F;
-        this.wingLeft.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.4F) * degree * -0.5F * limbSwingAmount - 0.2F;
+        // this.wingRight.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.4F) * degree * 0.5F * limbSwingAmount + 0.2F;
+        // this.wingLeft.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.4F) * degree * -0.5F * limbSwingAmount - 0.2F;
         this.legRight.rotateAngleX = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * 1.4F * limbSwingAmount;
         this.legRight.rotationPointY = MathHelper.cos(2.0F + limbSwing * speed * 0.4F) * degree * 0.2F * limbSwingAmount + 3.96F;
         this.legRight.rotationPointZ = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.1F * limbSwingAmount + 1.0F;
@@ -114,8 +114,10 @@ public class DodoModel<T extends Entity> extends AgeableModel<DodoEntity> {
         this.legLeft.rotateAngleX = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * -1.4F * limbSwingAmount;
         this.legLeft.rotationPointY = MathHelper.cos(-2.0F + limbSwing * speed * 0.4F) * degree * 0.2F * limbSwingAmount + 3.96F;
         this.legLeft.rotationPointZ = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * -0.1F * limbSwingAmount + 1.0F;
-            this.footLeft.rotateAngleX = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * 0.4F * limbSwingAmount/* - 0.1F*/;
+        this.footLeft.rotateAngleX = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * 0.4F * limbSwingAmount;
         this.footLeft.rotationPointY = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.05F * limbSwingAmount + 4.96F;
+        this.wingRight.rotateAngleZ = ageInTicks * 0.5F;
+        this.wingLeft.rotateAngleZ = -ageInTicks * 0.5F;
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
