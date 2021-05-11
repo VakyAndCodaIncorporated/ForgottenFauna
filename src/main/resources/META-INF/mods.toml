@@ -5,5 +5,5 @@ license="All rights reserved"
 modId="forgottenfauna" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="Forgotten Fauna" #mandatory
-credits="Coda" #optional
+credits="Coda, VakyPanda" #optional
 description='''Placeholder description.'''
