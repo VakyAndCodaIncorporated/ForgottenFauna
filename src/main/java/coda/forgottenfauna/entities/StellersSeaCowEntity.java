@@ -50,7 +50,6 @@ public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEn
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
         this.goalSelector.addGoal(7, new AvoidEntityGoal<>(this, GuardianEntity.class, 8.0F, 1.0D, 1.0D));
         this.targetSelector.addGoal(0, (new HurtByTargetGoal(this, GuardianEntity.class)).setCallsForHelp());
-
     }
 
     @Override
