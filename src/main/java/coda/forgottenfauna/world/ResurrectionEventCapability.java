@@ -33,7 +33,7 @@ public class ResurrectionEventCapability implements ICapabilitySerializable<IntN
 
     @Override
     public void deserializeNBT(IntNBT nbt) {
-        handler.setTicks(nbt.getInt());
+        handler.setTicks(nbt.getAsInt());
     }
 
     public static class Storage implements Capability.IStorage<ResurrectionEventHandler> {
@@ -45,7 +45,7 @@ public class ResurrectionEventCapability implements ICapabilitySerializable<IntN
 
         @Override
         public void readNBT(Capability<ResurrectionEventHandler> capability, ResurrectionEventHandler instance, Direction side, INBT nbt) {
-            instance.setTicks(((IntNBT) nbt).getInt());
+            instance.setTicks(((IntNBT) nbt).getAsInt());
         }
     }
 }

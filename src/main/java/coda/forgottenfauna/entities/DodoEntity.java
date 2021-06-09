@@ -46,7 +46,7 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.2D));
         this.goalSelector.addGoal(3, new FollowParentGoal(this, 1.2D));
-        this.goalSelector.addGoal(4, new TemptGoal(this, 1.2D, Ingredient.fromItems(Items.MELON_SLICE), true));
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.2D, Ingredient.of(Items.MELON_SLICE), true));
         this.goalSelector.addGoal(5, new DodoEntity.RaidFarmGoal(this));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 1));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 8.0F));
@@ -62,11 +62,11 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
     }
 
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
-        return isChild() ? 0.5F : 1.0F;
+        return isBaby() ? 0.5F : 1.0F;
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 10.0D).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.28D);
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.28D);
     }
 
     protected SoundEvent getAmbientSound() {
@@ -82,17 +82,17 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
     }
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.ENTITY_CHICKEN_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEvents.CHICKEN_STEP, 0.15F, 1.0F);
     }
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
+    public AgeableEntity getBreedOffspring(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
         return FFEntities.DODO.get().create(p_241840_1_);
     }
 
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         this.oFlap = this.wingRotation;
         this.oFlapSpeed = this.destPos;
         this.destPos = (float)((double)this.destPos + (double)(this.onGround ? -1 : 4) * 0.3D);
@@ -102,15 +102,15 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
         }
 
         this.wingRotDelta = (float)((double)this.wingRotDelta * 0.9D);
-        Vector3d vector3d = this.getMotion();
+        Vector3d vector3d = this.getDeltaMovement();
         if (!this.onGround && vector3d.y < 0.0D) {
-            this.setMotion(vector3d.mul(1.0D, 0.6D, 1.0D));
+            this.setDeltaMovement(vector3d.multiply(1.0D, 0.6D, 1.0D));
         }
 
         this.wingRotation += this.wingRotDelta * 2.0F;
     }
 
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier) {
         return false;
     }
 
@@ -119,10 +119,10 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
     }
 
     @Override
-    protected void updateAITasks() {
-        super.updateAITasks();
+    protected void customServerAiStep() {
+        super.customServerAiStep();
         if (this.cropTicks > 0) {
-            this.cropTicks -= this.rand.nextInt(3);
+            this.cropTicks -= this.random.nextInt(3);
             if (this.cropTicks < 0) {
                 this.cropTicks = 0;
             }
@@ -139,9 +139,9 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
             this.dodo = dodo;
         }
 
-        public boolean shouldExecute() {
-            if (this.runDelay <= 0) {
-                if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.dodo.world, this.dodo)) {
+        public boolean canUse() {
+            if (this.nextStartTick <= 0) {
+                if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.dodo.level, this.dodo)) {
                     return false;
                 }
 
@@ -150,45 +150,45 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
                 this.wantsToRaid = true;
             }
 
-            return super.shouldExecute();
+            return super.canUse();
         }
 
-        public boolean shouldContinueExecuting() {
-            return this.canRaid && super.shouldContinueExecuting();
+        public boolean canContinueToUse() {
+            return this.canRaid && super.canContinueToUse();
         }
 
         public void tick() {
             super.tick();
-            this.dodo.getLookController().setLookPosition((double)this.destinationBlock.getX() + 0.5D, (double)(this.destinationBlock.getY() + 1), (double)this.destinationBlock.getZ() + 0.5D, 10.0F, (float)this.dodo.getVerticalFaceSpeed());
-            if (this.getIsAboveDestination()) {
-                World world = this.dodo.world;
-                BlockPos blockpos = this.destinationBlock.up();
+            this.dodo.getLookControl().setLookAt((double)this.blockPos.getX() + 0.5D, (double)(this.blockPos.getY() + 1), (double)this.blockPos.getZ() + 0.5D, 10.0F, (float)this.dodo.getMaxHeadXRot());
+            if (this.isReachedTarget()) {
+                World world = this.dodo.level;
+                BlockPos blockpos = this.blockPos.above();
                 BlockState blockstate = world.getBlockState(blockpos);
                 Block block = blockstate.getBlock();
                 if (this.canRaid && block instanceof CropsBlock) {
-                    Integer age = blockstate.get(CropsBlock.AGE);
+                    Integer age = blockstate.getValue(CropsBlock.AGE);
                     if (age == 0) {
-                        world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
+                        world.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 2);
                         world.destroyBlock(blockpos, true, this.dodo);
                     }
                     else {
-                        world.setBlockState(blockpos, blockstate.with(CropsBlock.AGE, age - 1), 2);
-                        world.playEvent(2001, blockpos, Block.getStateId(blockstate));
+                        world.setBlock(blockpos, blockstate.setValue(CropsBlock.AGE, age - 1), 2);
+                        world.levelEvent(2001, blockpos, Block.getId(blockstate));
                     }
 
                     this.dodo.cropTicks = 40;
                 }
 
                 this.canRaid = false;
-                this.runDelay = 10;
+                this.nextStartTick = 10;
             }
 
         }
 
-        protected boolean shouldMoveTo(IWorldReader worldIn, BlockPos pos) {
+        protected boolean isValidTarget(IWorldReader worldIn, BlockPos pos) {
             Block block = worldIn.getBlockState(pos).getBlock();
             if (block == Blocks.FARMLAND && this.wantsToRaid && !this.canRaid) {
-                pos = pos.up();
+                pos = pos.above();
                 BlockState blockstate = worldIn.getBlockState(pos);
                 block = blockstate.getBlock();
                 if (block instanceof CropsBlock && ((CropsBlock)block).isMaxAge(blockstate)) {

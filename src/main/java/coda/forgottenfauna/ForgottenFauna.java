@@ -52,8 +52,8 @@ public class ForgottenFauna {
 
     private void registerCommon(FMLCommonSetupEvent event) {
         CapabilityManager.INSTANCE.register(ResurrectionEventHandler.class, new ResurrectionEventCapability.Storage(), ResurrectionEventHandler::new);
-        EntitySpawnPlacementRegistry.register(FFEntities.THYLACINE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::canAnimalSpawn);
-        EntitySpawnPlacementRegistry.register(FFEntities.DODO.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::canAnimalSpawn);
+        EntitySpawnPlacementRegistry.register(FFEntities.THYLACINE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::checkAnimalSpawnRules);
+        EntitySpawnPlacementRegistry.register(FFEntities.DODO.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::checkAnimalSpawnRules);
         EntitySpawnPlacementRegistry.register(FFEntities.BAIJI.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, BaijiEntity::canBaijiSpawn);
         EntitySpawnPlacementRegistry.register(FFEntities.STELLERS_SEA_COW.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, BaijiEntity::canBaijiSpawn);
     }
@@ -76,10 +76,10 @@ public class ForgottenFauna {
     }
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
-        event.put(FFEntities.THYLACINE.get(), ThylacineEntity.createAttributes().create());
-        event.put(FFEntities.BAIJI.get(), BaijiEntity.createAttributes().create());
-        event.put(FFEntities.DODO.get(), DodoEntity.createAttributes().create());
-        event.put(FFEntities.STELLERS_SEA_COW.get(), StellersSeaCowEntity.createAttributes().create());
+        event.put(FFEntities.THYLACINE.get(), ThylacineEntity.createAttributes().build());
+        event.put(FFEntities.BAIJI.get(), BaijiEntity.createAttributes().build());
+        event.put(FFEntities.DODO.get(), DodoEntity.createAttributes().build());
+        event.put(FFEntities.STELLERS_SEA_COW.get(), StellersSeaCowEntity.createAttributes().build());
     }
 
     private void registerClient(FMLClientSetupEvent event) {
@@ -115,7 +115,7 @@ public class ForgottenFauna {
 
     public final static ItemGroup GROUP = new ItemGroup(MOD_ID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(FFItems.THYLACINE_SPAWN_EGG.get());
         }
     };

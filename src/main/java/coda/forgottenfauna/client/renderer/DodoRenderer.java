@@ -20,11 +20,11 @@ public class DodoRenderer extends MobRenderer<DodoEntity, DodoModel<DodoEntity>>
         super(renderManagerIn, new DodoModel<>(), 0.5F);
     }
 
-    public ResourceLocation getEntityTexture(DodoEntity entity) {
+    public ResourceLocation getTextureLocation(DodoEntity entity) {
         return TEXTURE;
     }
 
-    protected float handleRotationFloat(DodoEntity livingBase, float partialTicks) {
+    protected float getBob(DodoEntity livingBase, float partialTicks) {
         float f = MathHelper.lerp(partialTicks, livingBase.oFlap, livingBase.wingRotation);
         float f1 = MathHelper.lerp(partialTicks, livingBase.oFlapSpeed, livingBase.destPos);
         return (MathHelper.sin(f) + 1.5F) * f1;

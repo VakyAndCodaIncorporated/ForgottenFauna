@@ -31,7 +31,6 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 
 public class ThylacineEntity extends AnimalEntity implements IResurrectedEntity {
-    private static final DataParameter<Boolean> STALKING = EntityDataManager.createKey(ThylacineEntity.class, DataSerializers.BOOLEAN);
 
     public ThylacineEntity(EntityType<? extends AnimalEntity> type, World world) {
         super(type, world);
@@ -42,8 +41,8 @@ public class ThylacineEntity extends AnimalEntity implements IResurrectedEntity 
         // this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(3, new FollowParentGoal(this, 1.25D));
-        this.goalSelector.addGoal(4, new TemptGoal(this, 1.25D, Ingredient.fromItems(Items.RABBIT), true));
-        this.goalSelector.addGoal(5, new ThylacineEntity.StalkAndAttackGoal(this));
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.25D, Ingredient.of(Items.RABBIT), true));
+        this.goalSelector.addGoal(5, new OcelotAttackGoal(this));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 1));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -58,23 +57,23 @@ public class ThylacineEntity extends AnimalEntity implements IResurrectedEntity 
     }
 
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
-        return isChild() ? 0.3F : 0.6F;
+        return isBaby() ? 0.3F : 0.6F;
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 14.0D).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35D).createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D);
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 14.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
-    public boolean attackEntityAsMob(Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)((int)this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
+    public boolean doHurtTarget(Entity entityIn) {
+        boolean flag = entityIn.hurt(DamageSource.mobAttack(this), (float)((int)this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
         if (flag) {
-            this.applyEnchantments(this, entityIn);
+            this.doEnchantDamageEffects(this, entityIn);
             playSound(FFSounds.THYLACINE_ATTACK.get(), 0.4F, 1.0F);
         }
 
         ThylacineEntity attacker = this;
-        if (attacker.getAttackTarget() instanceof RabbitEntity || attacker.getAttackTarget() instanceof ChickenEntity || attacker.getAttackTarget() instanceof ParrotEntity) {
-            entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), 10.0F);
+        if (attacker.getTarget() instanceof RabbitEntity || attacker.getTarget() instanceof ChickenEntity || attacker.getTarget() instanceof ParrotEntity) {
+            entityIn.hurt(DamageSource.mobAttack(this), 10.0F);
         }
 
         return flag;
@@ -93,65 +92,30 @@ public class ThylacineEntity extends AnimalEntity implements IResurrectedEntity 
     }
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.ENTITY_WOLF_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
     }
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
+    public AgeableEntity getBreedOffspring(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
         return FFEntities.THYLACINE.get().create(p_241840_1_);
     }
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(STALKING, false);
-    }
-
-    public boolean isStalking() {
-        return this.dataManager.get(STALKING);
-    }
-
-    public void setStalking(boolean stalking) {
-        this.dataManager.set(STALKING, stalking);
-    }
-
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
-        compound.putBoolean("Stalking", this.isStalking());
-    }
-
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
-        this.setStalking(compound.getBoolean("Stalking"));
-    }
-
-    static class StalkAndAttackGoal extends MeleeAttackGoal {
-        private final ThylacineEntity entity;
-
-        public StalkAndAttackGoal(ThylacineEntity entity) {
-            super(entity, 0.5D, true);
-            this.entity = entity;
-        }
-
-        @Override
-        public boolean shouldContinueExecuting() {
-            if (entity.getAttackTarget() != null) {
-                if (entity.getAttackTarget().getDistanceSq(entity) < 50.0D) {
-                    entity.setStalking(true);
-                }
+    @Override
+    public void customServerAiStep() {
+        if (this.getMoveControl().hasWanted()) {
+            double speed = this.getMoveControl().getSpeedModifier();
+            if (speed == 0.6D) {
+                this.setPose(Pose.CROUCHING);
+                this.setSprinting(false);
             }
             else {
-                entity.setStalking(false);
+                this.setPose(Pose.STANDING);
+                this.setSprinting(false);
             }
-            return super.shouldContinueExecuting();
-        }
-
-        @Override
-        public void resetTask() {
-            super.resetTask();
-            if (entity.getAttackTarget() == null) {
-                entity.setStalking(false);
-            }
+        } else {
+            this.setPose(Pose.STANDING);
+            this.setSprinting(false);
         }
     }
 }

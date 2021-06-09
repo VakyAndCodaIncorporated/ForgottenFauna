@@ -17,7 +17,7 @@ public class ThylacineRenderer extends MobRenderer<ThylacineEntity, ThylacineMod
         super(renderManagerIn, new ThylacineModel<>(), 0.4F);
     }
 
-    public ResourceLocation getEntityTexture(ThylacineEntity entity) {
+    public ResourceLocation getTextureLocation(ThylacineEntity entity) {
         return TEXTURE;
     }
 }

@@ -34,8 +34,8 @@ public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEn
 
     public StellersSeaCowEntity(EntityType<? extends AnimalEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new MoveHelperController(this);
-        this.setPathPriority(PathNodeType.WATER, 0.0F);
+        this.moveControl = new MoveHelperController(this);
+        this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
     }
 
     protected void registerGoals() {
@@ -49,20 +49,20 @@ public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEn
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.2F, true));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
         this.goalSelector.addGoal(7, new AvoidEntityGoal<>(this, GuardianEntity.class, 8.0F, 1.0D, 1.0D));
-        this.targetSelector.addGoal(0, (new HurtByTargetGoal(this, GuardianEntity.class)).setCallsForHelp());
+        this.targetSelector.addGoal(0, (new HurtByTargetGoal(this, GuardianEntity.class)).setAlertOthers());
     }
 
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         prevTilt = tilt;
         if (isInWater()) {
-            final float v = MathHelper.wrapSubtractDegrees(rotationYaw, prevRotationYaw);
+            final float v = MathHelper.degreesDifference(yRot, yRotO);
             if (Math.abs(v) > 1) {
                 if (Math.abs(tilt) < 25) {
                     tilt += Math.signum(v);
@@ -83,24 +83,24 @@ public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEn
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
+    public AgeableEntity getBreedOffspring(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
         return FFEntities.STELLERS_SEA_COW.get().create(p_241840_1_);
     }
 
-    public boolean attackEntityAsMob(Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)((int)this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
+    public boolean doHurtTarget(Entity entityIn) {
+        boolean flag = entityIn.hurt(DamageSource.mobAttack(this), (float)((int)this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
         if (flag) {
-            this.applyEnchantments(this, entityIn);
+            this.doEnchantDamageEffects(this, entityIn);
         }
 
         return flag;
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 80.0D).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2D).createMutableAttribute(Attributes.ATTACK_DAMAGE, 2.0D);
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 80.0D).add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.ATTACK_DAMAGE, 2.0D);
     }
 
-    protected PathNavigator createNavigator(World worldIn) {
+    protected PathNavigator createNavigation(World worldIn) {
         return new SwimmerPathNavigator(this, worldIn);
     }
 
@@ -128,22 +128,22 @@ public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEn
         return new ItemStack(FFItems.STELLERS_SEA_COW_SPAWN_EGG.get());
     }
 
-    protected SoundEvent getSplashSound() {
-        return SoundEvents.ENTITY_DOLPHIN_SPLASH;
+    protected SoundEvent getSwimSplashSound() {
+        return SoundEvents.DOLPHIN_SPLASH;
     }
 
     protected SoundEvent getSwimSound() {
-        return SoundEvents.ENTITY_DOLPHIN_SWIM;
+        return SoundEvents.DOLPHIN_SWIM;
     }
 
     @Override
     public void travel(Vector3d travelVector) {
-        if (this.isServerWorld() && this.isInWater()) {
+        if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(0.1F, travelVector);
-            this.move(MoverType.SELF, this.getMotion());
-            this.setMotion(this.getMotion().scale(0.9D));
-            if (this.getAttackTarget() == null) {
-                this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+            if (this.getTarget() == null) {
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
             }
         } else {
             super.travel(travelVector);
@@ -160,41 +160,41 @@ public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEn
 
         public void tick() {
             if (this.seaCow.isInWater()) {
-                this.seaCow.setMotion(this.seaCow.getMotion().add(0.0D, 0.005D, 0.0D));
+                this.seaCow.setDeltaMovement(this.seaCow.getDeltaMovement().add(0.0D, 0.005D, 0.0D));
             }
 
-            if (this.action == MovementController.Action.MOVE_TO && !this.seaCow.getNavigator().noPath()) {
-                double d0 = this.posX - this.seaCow.getPosX();
-                double d1 = this.posY - this.seaCow.getPosY();
-                double d2 = this.posZ - this.seaCow.getPosZ();
+            if (this.operation == MovementController.Action.MOVE_TO && !this.seaCow.getNavigation().isDone()) {
+                double d0 = this.wantedX - this.seaCow.getX();
+                double d1 = this.wantedY - this.seaCow.getY();
+                double d2 = this.wantedZ - this.seaCow.getZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 if (d3 < (double)2.5000003E-7F) {
-                    this.mob.setMoveForward(0.0F);
+                    this.mob.setZza(0.0F);
                 } else {
                     float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
-                    this.seaCow.rotationYaw = this.limitAngle(this.seaCow.rotationYaw, f, 10.0F);
-                    this.seaCow.renderYawOffset = this.seaCow.rotationYaw;
-                    this.seaCow.rotationYawHead = this.seaCow.rotationYaw;
-                    float f1 = (float)(this.speed * this.seaCow.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                    this.seaCow.yRot = this.rotlerp(this.seaCow.yRot, f, 10.0F);
+                    this.seaCow.yBodyRot = this.seaCow.yRot;
+                    this.seaCow.yHeadRot = this.seaCow.yRot;
+                    float f1 = (float)(this.speedModifier * this.seaCow.getAttributeValue(Attributes.MOVEMENT_SPEED));
                     if (this.seaCow.isInWater()) {
-                        this.seaCow.setAIMoveSpeed(f1 * 0.02F);
+                        this.seaCow.setSpeed(f1 * 0.02F);
                         float f2 = -((float)(MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
                         f2 = MathHelper.clamp(MathHelper.wrapDegrees(f2), -85.0F, 85.0F);
-                        this.seaCow.rotationPitch = this.limitAngle(this.seaCow.rotationPitch, f2, 5.0F);
-                        float f3 = MathHelper.cos(this.seaCow.rotationPitch * ((float)Math.PI / 180F));
-                        float f4 = MathHelper.sin(this.seaCow.rotationPitch * ((float)Math.PI / 180F));
-                        this.seaCow.moveForward = f3 * f1;
-                        this.seaCow.moveVertical = -f4 * f1;
+                        this.seaCow.xRot = this.rotlerp(this.seaCow.xRot, f2, 5.0F);
+                        float f3 = MathHelper.cos(this.seaCow.xRot * ((float)Math.PI / 180F));
+                        float f4 = MathHelper.sin(this.seaCow.xRot * ((float)Math.PI / 180F));
+                        this.seaCow.zza = f3 * f1;
+                        this.seaCow.yya = -f4 * f1;
                     } else {
-                        this.seaCow.setAIMoveSpeed(f1 * 0.1F);
+                        this.seaCow.setSpeed(f1 * 0.1F);
                     }
 
                 }
             } else {
-                this.seaCow.setAIMoveSpeed(0.0F);
-                this.seaCow.setMoveStrafing(0.0F);
-                this.seaCow.setMoveVertical(0.0F);
-                this.seaCow.setMoveForward(0.0F);
+                this.seaCow.setSpeed(0.0F);
+                this.seaCow.setXxa(0.0F);
+                this.seaCow.setYya(0.0F);
+                this.seaCow.setZza(0.0F);
             }
         }
     }

@@ -20,13 +20,13 @@ public class StellersSeaCowRenderer extends MobRenderer<StellersSeaCowEntity, St
         super(renderManagerIn, new StellersSeaCowModel<>(), 1.6F);
     }
 
-    public ResourceLocation getEntityTexture(StellersSeaCowEntity entity) {
+    public ResourceLocation getTextureLocation(StellersSeaCowEntity entity) {
         return TEXTURE;
     }
 
     @Override
-    protected void preRenderCallback(StellersSeaCowEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
-        super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTickTime, entitylivingbaseIn.prevTilt, entitylivingbaseIn.tilt)));
+    protected void scale(StellersSeaCowEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+        super.scale(entitylivingbaseIn, matrixStackIn, partialTickTime);
+        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTickTime, entitylivingbaseIn.prevTilt, entitylivingbaseIn.tilt)));
     }
 }

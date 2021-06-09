@@ -17,7 +17,7 @@ public class BaijiRenderer extends MobRenderer<BaijiEntity, BaijiModel<BaijiEnti
         super(renderManagerIn, new BaijiModel<>(), 0.4F);
     }
 
-    public ResourceLocation getEntityTexture(BaijiEntity entity) {
+    public ResourceLocation getTextureLocation(BaijiEntity entity) {
         return TEXTURE;
     }
 }
