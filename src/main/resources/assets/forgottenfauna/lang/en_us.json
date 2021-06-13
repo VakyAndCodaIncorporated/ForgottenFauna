@@ -3,11 +3,13 @@
   "item.forgottenfauna.baiji_spawn_egg": "Baiji Spawn Egg",
   "item.forgottenfauna.dodo_spawn_egg": "Dodo Spawn Egg",
   "item.forgottenfauna.stellers_sea_cow_spawn_egg": "Steller's Sea Cow Spawn Egg",
+  "item.forgottenfauna.great_auk_spawn_egg": "Great Auk Spawn Egg",
 
   "entity.forgottenfauna.thylacine": "Thylacine",
   "entity.forgottenfauna.baiji": "Baiji",
   "entity.forgottenfauna.dodo": "Dodo",
   "entity.forgottenfauna.stellers_sea_cow": "Steller's Sea Cow",
+  "entity.forgottenfauna.great_auk": "Great Auk",
 
   "forgottenfauna.thylacine.ambient": "Thylacine growls",
   "forgottenfauna.thylacine.hurt": "Thylacine hurts",
@@ -18,6 +20,9 @@
   "forgottenfauna.dodo.death": "Dodo dies",
   "forgottenfauna.stellers_sea_cow.hurt": "Steller's Sea Cow hurts",
   "forgottenfauna.stellers_sea_cow.death": "Steller's Sea Cow dies",
+  "forgottenfauna.great_auk.ambient": "Great Auk chatters",
+  "forgottenfauna.great_auk.hurt": "Great Auk hurts",
+  "forgottenfauna.great_auk.death": "Great Auk dies",
 
   "itemGroup.forgottenfauna": "Forgotten Fauna"
 }

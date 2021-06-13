@@ -4,7 +4,7 @@
     "sounds": [
       {
         "name": "forgottenfauna:thylacine/ambient",
-        "streaming": true
+        "stream": true
       }
     ]
   },
@@ -13,7 +13,7 @@
     "sounds": [
       {
         "name": "forgottenfauna:thylacine/hurt",
-        "streaming": true
+        "stream": true
       }
     ]
   },
@@ -22,7 +22,7 @@
     "sounds": [
       {
         "name": "forgottenfauna:thylacine/death",
-        "streaming": true
+        "stream": true
       }
     ]
   },
@@ -31,7 +31,7 @@
     "sounds": [
       {
         "name": "forgottenfauna:thylacine/attack",
-        "streaming": true
+        "stream": true
       }
     ]
   },
@@ -40,7 +40,7 @@
     "sounds": [
       {
         "name": "forgottenfauna:dodo/ambient",
-        "streaming": true
+        "stream": true
       }
     ]
   },
@@ -49,7 +49,7 @@
     "sounds": [
       {
         "name": "forgottenfauna:dodo/hurt",
-        "streaming": true
+        "stream": true
       }
     ]
   },
@@ -58,7 +58,7 @@
     "sounds": [
       {
         "name": "forgottenfauna:dodo/death",
-        "streaming": true
+        "stream": true
       }
     ]
   },
@@ -67,7 +67,7 @@
     "sounds": [
       {
         "name": "forgottenfauna:stellers_sea_cow/hurt",
-        "streaming": true
+        "stream": true
       }
     ]
   },
@@ -76,7 +76,38 @@
     "sounds": [
       {
         "name": "forgottenfauna:stellers_sea_cow/death",
-        "streaming": true
+        "stream": true
+      }
+    ]
+  },
+  "great_auk.ambient": {
+    "subtitle": "forgottenfauna.great_auk.ambient",
+    "sounds": [
+      {
+        "name": "forgottenfauna:great_auk/ambient_1",
+        "stream": true
+      },
+      {
+        "name": "forgottenfauna:great_auk/ambient_2",
+        "stream": true
+      }
+    ]
+  },
+  "great_auk.hurt": {
+    "subtitle": "forgottenfauna.great_auk.hurt",
+    "sounds": [
+      {
+        "name": "forgottenfauna:great_auk/hurt",
+        "stream": true
+      }
+    ]
+  },
+  "great_auk.death": {
+    "subtitle": "forgottenfauna.great_auk.death",
+    "sounds": [
+      {
+        "name": "forgottenfauna:great_auk/death",
+        "stream": true
       }
     ]
   }

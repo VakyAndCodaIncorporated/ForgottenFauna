@@ -1,5 +1,6 @@
-package coda.forgottenfauna.entities;
+package coda.forgottenfauna.common.entities;
 
+import coda.forgottenfauna.common.entities.ai.DodoForageGoal;
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
 import coda.forgottenfauna.init.FFSounds;
@@ -26,22 +27,28 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
+public class DodoEntity extends AnimalEntity {
     private int cropTicks;
     public float wingRotation;
     public float destPos;
     public float oFlapSpeed;
     public float oFlap;
     public float wingRotDelta = 1.0F;
+    public int eatAnimationTick;
+    private DodoForageGoal forageGoal;
 
     public DodoEntity(EntityType<? extends AnimalEntity> type, World world) {
         super(type, world);
     }
 
     protected void registerGoals() {
+        this.forageGoal = new DodoForageGoal(this);
+        this.goalSelector.addGoal(0, this.forageGoal);
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.2D));
@@ -61,6 +68,7 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
         return new ItemStack(FFItems.DODO_SPAWN_EGG.get());
     }
 
+    @Override
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
         return isBaby() ? 0.5F : 1.0F;
     }
@@ -69,18 +77,22 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
         return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.28D);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return FFSounds.DODO_AMBIENT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return FFSounds.DODO_DEATH.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return FFSounds.DODO_HURT.get();
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
         this.playSound(SoundEvents.CHICKEN_STEP, 0.15F, 1.0F);
     }
@@ -91,6 +103,7 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
         return FFEntities.DODO.get().create(p_241840_1_);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         this.oFlap = this.wingRotation;
@@ -107,15 +120,39 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
             this.setDeltaMovement(vector3d.multiply(1.0D, 0.6D, 1.0D));
         }
 
+        if (this.level.isClientSide) {
+            this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
+        }
+
         this.wingRotation += this.wingRotDelta * 2.0F;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier) {
         return false;
     }
 
     private boolean isCropEaten() {
         return this.cropTicks == 0;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void handleEntityEvent(byte p_70103_1_) {
+        if (p_70103_1_ == 10) {
+            this.eatAnimationTick = 40;
+        } else {
+            super.handleEntityEvent(p_70103_1_);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public float getHeadEatAngleScale(float p_70890_1_) {
+        if (this.eatAnimationTick > 4 && this.eatAnimationTick <= 36) {
+            float f = ((float)(this.eatAnimationTick - 4) - p_70890_1_) / 32.0F;
+            return ((float)Math.PI / 5F) + 0.21991149F * MathHelper.sin(f * 28.7F);
+        } else {
+            return this.eatAnimationTick > 0 ? ((float)Math.PI / 5F) : this.xRot * ((float)Math.PI / 180F);
+        }
     }
 
     @Override
@@ -127,6 +164,7 @@ public class DodoEntity extends AnimalEntity implements IResurrectedEntity {
                 this.cropTicks = 0;
             }
         }
+        this.eatAnimationTick = this.forageGoal.getEatAnimationTick();
     }
 
     static class RaidFarmGoal extends MoveToBlockGoal {

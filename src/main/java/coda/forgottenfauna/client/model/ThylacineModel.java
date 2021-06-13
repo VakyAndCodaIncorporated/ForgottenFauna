@@ -1,6 +1,6 @@
 package coda.forgottenfauna.client.model;
 
-import coda.forgottenfauna.entities.ThylacineEntity;
+import coda.forgottenfauna.common.entities.ThylacineEntity;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
 import net.minecraft.client.renderer.model.ModelRenderer;

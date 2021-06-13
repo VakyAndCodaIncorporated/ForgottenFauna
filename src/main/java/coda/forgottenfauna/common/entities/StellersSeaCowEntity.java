@@ -1,4 +1,4 @@
-package coda.forgottenfauna.entities;
+package coda.forgottenfauna.common.entities;
 
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
@@ -6,14 +6,13 @@ import coda.forgottenfauna.init.FFSounds;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.controller.DolphinLookController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.fish.CodEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
@@ -28,7 +27,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
-public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEntity {
+public class StellersSeaCowEntity extends AnimalEntity {
     public float prevTilt;
     public float tilt;
 
@@ -36,6 +35,7 @@ public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEn
         super(type, worldIn);
         this.moveControl = new MoveHelperController(this);
         this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+        this.lookControl = new DolphinLookController(this, 10);
     }
 
     protected void registerGoals() {
@@ -43,7 +43,7 @@ public class StellersSeaCowEntity extends AnimalEntity implements IResurrectedEn
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(1, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(2, new FollowParentGoal(this, 1.25D));
-        this.goalSelector.addGoal(3, new RandomSwimmingGoal(this, 1.0D, 1));
+        this.goalSelector.addGoal(3, new RandomSwimmingGoal(this, 1.0D, 40));
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.2F, true));

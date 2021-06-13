@@ -2,7 +2,7 @@ package coda.forgottenfauna.client.renderer;
 
 import coda.forgottenfauna.ForgottenFauna;
 import coda.forgottenfauna.client.model.BaijiModel;
-import coda.forgottenfauna.entities.BaijiEntity;
+import coda.forgottenfauna.common.entities.BaijiEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;

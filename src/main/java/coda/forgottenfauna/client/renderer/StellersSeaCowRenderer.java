@@ -2,7 +2,7 @@ package coda.forgottenfauna.client.renderer;
 
 import coda.forgottenfauna.ForgottenFauna;
 import coda.forgottenfauna.client.model.StellersSeaCowModel;
-import coda.forgottenfauna.entities.StellersSeaCowEntity;
+import coda.forgottenfauna.common.entities.StellersSeaCowEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;

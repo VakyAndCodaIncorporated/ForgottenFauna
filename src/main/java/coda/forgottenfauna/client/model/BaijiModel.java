@@ -1,11 +1,8 @@
 package coda.forgottenfauna.client.model;
 
-import coda.forgottenfauna.entities.BaijiEntity;
+import coda.forgottenfauna.common.entities.BaijiEntity;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
-import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -67,7 +64,7 @@ public class BaijiModel<T extends Entity> extends AgeableModel<BaijiEntity> {
 
     @Override
     protected Iterable<ModelRenderer> headParts() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package coda.forgottenfauna.entities;
+package coda.forgottenfauna.common.entities;
 
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
@@ -13,11 +13,11 @@ import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -35,13 +35,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
+public class BaijiEntity extends AnimalEntity {
     private static final EntityPredicate PLAYER_PREDICATE = (new EntityPredicate()).range(10.0D).allowSameTeam().allowInvulnerable().allowUnseeable();
 
     public BaijiEntity(EntityType<? extends BaijiEntity> type, World worldIn) {
         super(type, worldIn);
         this.moveControl = new BaijiEntity.MoveHelperController(this);
         this.lookControl = new DolphinLookController(this, 10);
+        this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
     }
 
     @Nullable
@@ -66,7 +67,7 @@ public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
-        this.goalSelector.addGoal(1, new BaijiEntity.SwimWithPlayerGoal(this, 4.0D));
+        // this.goalSelector.addGoal(1, new BaijiEntity.SwimWithPlayerGoal(this, 4.0D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(3, new FollowParentGoal(this, 1.25D));
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
@@ -79,7 +80,7 @@ public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 1.2D).add(Attributes.ATTACK_DAMAGE, 3.0D);
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 2.8D).add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
     protected PathNavigator createNavigation(World worldIn) {
@@ -196,9 +197,9 @@ public class BaijiEntity extends AnimalEntity implements IResurrectedEntity {
     static class MoveHelperController extends MovementController {
         private final BaijiEntity baiji;
 
-        public MoveHelperController(BaijiEntity baijiIn) {
-            super(baijiIn);
-            this.baiji = baijiIn;
+        public MoveHelperController(BaijiEntity baiji) {
+            super(baiji);
+            this.baiji = baiji;
         }
 
         public void tick() {

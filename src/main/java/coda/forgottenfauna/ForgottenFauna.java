@@ -1,12 +1,13 @@
 package coda.forgottenfauna;
 
-import coda.forgottenfauna.entities.*;
+import coda.forgottenfauna.common.entities.*;
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
 import coda.forgottenfauna.client.ClientEvents;
 import coda.forgottenfauna.init.FFSounds;
-import coda.forgottenfauna.world.ResurrectionEventCapability;
-import coda.forgottenfauna.world.ResurrectionEventHandler;
+import coda.forgottenfauna.common.world.ResurrectionEventCapability;
+import coda.forgottenfauna.common.world.ResurrectionEventHandler;
+import coda.forgottenfauna.init.FFTags;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -80,6 +81,7 @@ public class ForgottenFauna {
         event.put(FFEntities.BAIJI.get(), BaijiEntity.createAttributes().build());
         event.put(FFEntities.DODO.get(), DodoEntity.createAttributes().build());
         event.put(FFEntities.STELLERS_SEA_COW.get(), StellersSeaCowEntity.createAttributes().build());
+        event.put(FFEntities.GREAT_AUK.get(), GreatAukEntity.createAttributes().build());
     }
 
     private void registerClient(FMLClientSetupEvent event) {
@@ -98,7 +100,7 @@ public class ForgottenFauna {
         if (event.getWorld() instanceof World) {
             final World world = (World) event.getWorld();
             world.getCapability(ResurrectionEventCapability.capability).ifPresent(handler -> {
-                if (event.getEntityLiving() instanceof IResurrectedEntity && !handler.isActive()) {
+                if (event.getEntityLiving().getType().is(FFTags.RESURRECTED_ENTITY) && !handler.isActive()) {
                     event.setResult(Event.Result.DENY);
                 }
             });

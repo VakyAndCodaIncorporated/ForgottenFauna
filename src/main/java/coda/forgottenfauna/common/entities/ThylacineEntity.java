@@ -1,4 +1,4 @@
-package coda.forgottenfauna.entities;
+package coda.forgottenfauna.common.entities;
 
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
@@ -16,10 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -30,7 +26,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
-public class ThylacineEntity extends AnimalEntity implements IResurrectedEntity {
+public class ThylacineEntity extends AnimalEntity {
 
     public ThylacineEntity(EntityType<? extends AnimalEntity> type, World world) {
         super(type, world);

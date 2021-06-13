@@ -1,6 +1,6 @@
 package coda.forgottenfauna.client.model;
 
-import coda.forgottenfauna.entities.StellersSeaCowEntity;
+import coda.forgottenfauna.common.entities.StellersSeaCowEntity;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -89,7 +89,7 @@ public class StellersSeaCowModel<T extends Entity> extends AgeableModel<Stellers
 
     @Override
     protected Iterable<ModelRenderer> headParts() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override

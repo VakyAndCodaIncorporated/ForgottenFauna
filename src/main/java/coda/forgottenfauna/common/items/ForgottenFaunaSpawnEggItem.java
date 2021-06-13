@@ -1,4 +1,4 @@
-package coda.forgottenfauna.items;
+package coda.forgottenfauna.common.items;
 
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;

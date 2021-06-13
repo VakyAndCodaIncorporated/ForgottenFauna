@@ -1,4 +1,4 @@
-package coda.forgottenfauna.world;
+package coda.forgottenfauna.common.world;
 
 import coda.forgottenfauna.ForgottenFauna;
 import net.minecraft.nbt.INBT;

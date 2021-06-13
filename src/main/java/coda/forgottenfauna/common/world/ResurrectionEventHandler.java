@@ -1,4 +1,4 @@
-package coda.forgottenfauna.world;
+package coda.forgottenfauna.common.world;
 
 public class ResurrectionEventHandler {
     private int ticks;

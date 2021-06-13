@@ -19,4 +19,7 @@ public class FFSounds {
     public static final RegistryObject<SoundEvent> DODO_DEATH = REGISTRY.register("dodo_death", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "dodo.death")));
     public static final RegistryObject<SoundEvent> STELLERS_SEA_COW_HURT = REGISTRY.register("stellers_sea_cow_hurt", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "stellers_sea_cow.hurt")));
     public static final RegistryObject<SoundEvent> STELLERS_SEA_COW_DEATH = REGISTRY.register("stellers_sea_cow_death", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "stellers_sea_cow.death")));
+    public static final RegistryObject<SoundEvent> GREAT_AUK_HURT = REGISTRY.register("great_auk_hurt", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "great_auk.hurt")));
+    public static final RegistryObject<SoundEvent> GREAT_AUK_AMBIENT = REGISTRY.register("great_auk_ambient", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "great_auk.ambient")));
+    public static final RegistryObject<SoundEvent> GREAT_AUK_DEATH = REGISTRY.register("great_auk_death", () -> new SoundEvent(new ResourceLocation(ForgottenFauna.MOD_ID, "great_auk.death")));
 }

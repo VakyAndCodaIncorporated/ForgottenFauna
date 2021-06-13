@@ -1,12 +1,9 @@
 package coda.forgottenfauna.client;
 
 import coda.forgottenfauna.ForgottenFauna;
-import coda.forgottenfauna.client.renderer.BaijiRenderer;
-import coda.forgottenfauna.client.renderer.DodoRenderer;
-import coda.forgottenfauna.client.renderer.StellersSeaCowRenderer;
-import coda.forgottenfauna.client.renderer.ThylacineRenderer;
+import coda.forgottenfauna.client.renderer.*;
 import coda.forgottenfauna.init.FFEntities;
-import coda.forgottenfauna.items.ForgottenFaunaSpawnEggItem;
+import coda.forgottenfauna.common.items.ForgottenFaunaSpawnEggItem;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,6 +22,7 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(FFEntities.BAIJI.get(), BaijiRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(FFEntities.DODO.get(), DodoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(FFEntities.STELLERS_SEA_COW.get(), StellersSeaCowRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(FFEntities.GREAT_AUK.get(), GreatAukRenderer::new);
     }
 
     @SubscribeEvent

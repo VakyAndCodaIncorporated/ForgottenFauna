@@ -1,11 +1,8 @@
 package coda.forgottenfauna.client.model;
 
-import coda.forgottenfauna.entities.DodoEntity;
+import coda.forgottenfauna.common.entities.DodoEntity;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
-import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -28,6 +25,7 @@ public class DodoModel<T extends Entity> extends AgeableModel<DodoEntity> {
     public ModelRenderer beakTip;
     public ModelRenderer footRight;
     public ModelRenderer footLeft;
+    private float neckXRot;
 
     public DodoModel() {
         this.texWidth = 64;
@@ -92,7 +90,7 @@ public class DodoModel<T extends Entity> extends AgeableModel<DodoEntity> {
 
     @Override
     protected Iterable<ModelRenderer> headParts() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override
@@ -112,20 +110,31 @@ public class DodoModel<T extends Entity> extends AgeableModel<DodoEntity> {
         this.neck.xRot = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.2F * limbSwingAmount + 0.2F;
         this.tail.xRot = MathHelper.cos(limbSwing * speed * 0.4F) * degree * 0.2F * limbSwingAmount + 0.2F;
         this.tail.y = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.05F * limbSwingAmount - 2.0F;
-        // this.wingRight.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.4F) * degree * 0.5F * f1 + 0.2F;
-        // this.wingLeft.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.4F) * degree * -0.5F * f1 - 0.2F;
         this.legRight.xRot = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * 1.4F * limbSwingAmount + 0.2F;
         this.legRight.y = MathHelper.cos(2.0F + limbSwing * speed * 0.4F) * degree * 0.2F * limbSwingAmount + 3.96F;
         this.legRight.z = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.1F * limbSwingAmount + 1.0F;
         this.footRight.y = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.05F * limbSwingAmount + 4.96F;
-        // this.footRight.rotateAngleX = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * -0.4F * limbSwingAmount - 0.1F;
         this.legLeft.xRot = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * -1.4F * limbSwingAmount + 0.2F;
         this.legLeft.y = MathHelper.cos(-2.0F + limbSwing * speed * 0.4F) * degree * 0.2F * limbSwingAmount + 3.96F;
         this.legLeft.z = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * -0.1F * limbSwingAmount + 1.0F;
-        // this.footLeft.rotateAngleX = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * 0.4F * limbSwingAmount - 0.1F;
         this.footLeft.y = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * 0.05F * limbSwingAmount + 4.96F;
         this.wingRight.zRot = ageInTicks * 0.5F;
         this.wingLeft.zRot = -ageInTicks * 0.5F;
+        // this.wingRight.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.4F) * degree * 0.5F * f1 + 0.2F;
+        // this.wingLeft.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.4F) * degree * -0.5F * f1 - 0.2F;
+        // this.footRight.rotateAngleX = MathHelper.cos(-1.0F + limbSwing * speed * 0.4F) * degree * -0.4F * limbSwingAmount - 0.1F;
+        // this.footLeft.rotateAngleX = MathHelper.cos(1.0F + limbSwing * speed * 0.4F) * degree * 0.4F * limbSwingAmount - 0.1F;
+
+        if (entityIn.eatAnimationTick > 4 && entityIn.eatAnimationTick <= 36) {
+            this.neck.xRot = this.neckXRot;
+        }
+    }
+
+    @Override
+    public void prepareMobModel(DodoEntity p_212843_1_, float p_212843_2_, float p_212843_3_, float p_212843_4_) {
+        super.prepareMobModel(p_212843_1_, p_212843_2_, p_212843_3_, p_212843_4_);
+        this.neckXRot = p_212843_1_.getHeadEatAngleScale(p_212843_4_) + 0.5F;
+
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

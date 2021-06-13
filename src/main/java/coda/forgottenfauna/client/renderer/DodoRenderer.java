@@ -1,10 +1,8 @@
 package coda.forgottenfauna.client.renderer;
 
 import coda.forgottenfauna.ForgottenFauna;
-import coda.forgottenfauna.client.model.BaijiModel;
 import coda.forgottenfauna.client.model.DodoModel;
-import coda.forgottenfauna.entities.BaijiEntity;
-import coda.forgottenfauna.entities.DodoEntity;
+import coda.forgottenfauna.common.entities.DodoEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
