@@ -97,7 +97,7 @@ public class StellersSeaCowEntity extends AnimalEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 80.0D).add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.ATTACK_DAMAGE, 2.0D);
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 80.0D).add(Attributes.MOVEMENT_SPEED, 0.17D).add(Attributes.ATTACK_DAMAGE, 2.0D);
     }
 
     protected PathNavigator createNavigation(World worldIn) {

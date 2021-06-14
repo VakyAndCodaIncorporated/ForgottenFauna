@@ -2,12 +2,12 @@ package coda.forgottenfauna.common.entities;
 
 import coda.forgottenfauna.init.FFEntities;
 import coda.forgottenfauna.init.FFItems;
+import coda.weecore.common.entities.SwimmingTiltingMoveHelperController;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.DolphinLookController;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -40,7 +40,7 @@ public class BaijiEntity extends AnimalEntity {
 
     public BaijiEntity(EntityType<? extends BaijiEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveControl = new BaijiEntity.MoveHelperController(this);
+        this.moveControl = new SwimmingTiltingMoveHelperController(this);
         this.lookControl = new DolphinLookController(this, 10);
         this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
     }
@@ -67,7 +67,7 @@ public class BaijiEntity extends AnimalEntity {
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
-        // this.goalSelector.addGoal(1, new BaijiEntity.SwimWithPlayerGoal(this, 4.0D));
+        this.goalSelector.addGoal(1, new BaijiEntity.SwimWithPlayerGoal(this, 4.0D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.25D));
         this.goalSelector.addGoal(3, new FollowParentGoal(this, 1.25D));
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
@@ -190,56 +190,6 @@ public class BaijiEntity extends AnimalEntity {
             }
         } else {
             super.travel(travelVector);
-        }
-
-    }
-
-    static class MoveHelperController extends MovementController {
-        private final BaijiEntity baiji;
-
-        public MoveHelperController(BaijiEntity baiji) {
-            super(baiji);
-            this.baiji = baiji;
-        }
-
-        public void tick() {
-            if (this.baiji.isInWater()) {
-                this.baiji.setDeltaMovement(this.baiji.getDeltaMovement().add(0.0D, 0.005D, 0.0D));
-            }
-
-            if (this.operation == MovementController.Action.MOVE_TO && !this.baiji.getNavigation().isDone()) {
-                double d0 = this.wantedX - this.baiji.getX();
-                double d1 = this.wantedY - this.baiji.getY();
-                double d2 = this.wantedZ - this.baiji.getZ();
-                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                if (d3 < (double)2.5000003E-7F) {
-                    this.mob.setZza(0.0F);
-                } else {
-                    float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
-                    this.baiji.yRot = this.rotlerp(this.baiji.yRot, f, 10.0F);
-                    this.baiji.yBodyRot = this.baiji.yRot;
-                    this.baiji.yHeadRot = this.baiji.yRot;
-                    float f1 = (float)(this.speedModifier * this.baiji.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                    if (this.baiji.isInWater()) {
-                        this.baiji.setSpeed(f1 * 0.02F);
-                        float f2 = -((float)(MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
-                        f2 = MathHelper.clamp(MathHelper.wrapDegrees(f2), -85.0F, 85.0F);
-                        this.baiji.xRot = this.rotlerp(this.baiji.xRot, f2, 5.0F);
-                        float f3 = MathHelper.cos(this.baiji.xRot * ((float)Math.PI / 180F));
-                        float f4 = MathHelper.sin(this.baiji.xRot * ((float)Math.PI / 180F));
-                        this.baiji.zza = f3 * f1;
-                        this.baiji.yya = -f4 * f1;
-                    } else {
-                        this.baiji.setSpeed(f1 * 0.1F);
-                    }
-
-                }
-            } else {
-                this.baiji.setSpeed(0.0F);
-                this.baiji.setXxa(0.0F);
-                this.baiji.setYya(0.0F);
-                this.baiji.setZza(0.0F);
-            }
         }
     }
 

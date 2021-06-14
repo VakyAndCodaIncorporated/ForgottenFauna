@@ -2,8 +2,9 @@ package coda.forgottenfauna.client;
 
 import coda.forgottenfauna.ForgottenFauna;
 import coda.forgottenfauna.client.renderer.*;
+import coda.forgottenfauna.common.items.FFSpawnEggItem;
 import coda.forgottenfauna.init.FFEntities;
-import coda.forgottenfauna.common.items.ForgottenFaunaSpawnEggItem;
+import coda.weecore.common.items.WCSpawnEggItem;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,7 +30,7 @@ public class ClientEvents {
     @OnlyIn(Dist.CLIENT)
     public static void itemColors(ColorHandlerEvent.Item event) {
         ItemColors handler = event.getItemColors();
-        IItemColor eggColor = (stack, tintIndex) -> ((ForgottenFaunaSpawnEggItem) stack.getItem()).getColor(tintIndex);
-        for (ForgottenFaunaSpawnEggItem e : ForgottenFaunaSpawnEggItem.UNADDED_EGGS) handler.register(eggColor, e);
+        IItemColor eggColor = (stack, tintIndex) -> ((FFSpawnEggItem) stack.getItem()).getColor(tintIndex);
+        for (FFSpawnEggItem e : FFSpawnEggItem.SPAWN_EGGS) handler.register(eggColor, e);
     }
 }

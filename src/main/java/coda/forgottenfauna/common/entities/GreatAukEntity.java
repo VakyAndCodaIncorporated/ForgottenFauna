@@ -8,6 +8,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.controller.DolphinLookController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -35,7 +36,9 @@ public class GreatAukEntity extends AnimalEntity {
     public GreatAukEntity(EntityType<? extends AnimalEntity> p_i48568_1_, World p_i48568_2_) {
         super(p_i48568_1_, p_i48568_2_);
         this.moveControl = new GreatAukEntity.MoveHelperController(this);
+        this.lookControl = new DolphinLookController(this, 10);
         this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -74,7 +77,7 @@ public class GreatAukEntity extends AnimalEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.ATTACK_DAMAGE, 1).add(Attributes.MOVEMENT_SPEED, 0.15);
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.ATTACK_DAMAGE, 1).add(Attributes.MOVEMENT_SPEED, 0.35);
     }
 
     @Nullable
@@ -125,40 +128,45 @@ public class GreatAukEntity extends AnimalEntity {
     static class MoveHelperController extends MovementController {
         private final GreatAukEntity auk;
 
-        MoveHelperController(GreatAukEntity penglil) {
-            super(penglil);
-            this.auk = penglil;
-        }
-
-        private void updateSpeed() {
-            if (this.auk.isInWater()) {
-                this.auk.setDeltaMovement(this.auk.getDeltaMovement().add(0.0D, 0.005D, 0.0D));
-
-                if (this.auk.isBaby()) {
-                    this.auk.setSpeed(Math.max(this.auk.getSpeed() / 3.0F, 0.06F));
-                }
-            }
-            else if (this.auk.onGround) {
-                this.auk.setSpeed(Math.max(this.auk.getSpeed(), 0.06F));
-            }
+        public MoveHelperController(GreatAukEntity auk) {
+            super(auk);
+            this.auk = auk;
         }
 
         public void tick() {
-            this.updateSpeed();
+
             if (this.operation == MovementController.Action.MOVE_TO && !this.auk.getNavigation().isDone()) {
                 double d0 = this.wantedX - this.auk.getX();
                 double d1 = this.wantedY - this.auk.getY();
                 double d2 = this.wantedZ - this.auk.getZ();
-                double d3 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-                d1 = d1 / d3;
-                float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
-                this.auk.yRot = this.rotlerp(this.auk.yRot, f, 90.0F);
-                this.auk.yBodyRot = this.auk.yRot;
-                float f1 = (float)(this.speedModifier * this.auk.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                this.auk.setSpeed(MathHelper.lerp(0.125F, this.auk.getSpeed(), f1));
-                this.auk.setDeltaMovement(this.auk.getDeltaMovement().add(0.0D, (double)this.auk.getSpeed() * d1 * 0.1D, 0.0D));
+                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+                if (d3 < (double)2.5000003E-7F) {
+                    this.mob.setZza(0.0F);
+                } else {
+                    float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
+                    this.auk.yRot = this.rotlerp(this.auk.yRot, f, 10.0F);
+                    this.auk.yBodyRot = this.auk.yRot;
+                    this.auk.yHeadRot = this.auk.yRot;
+                    float f1 = (float)(this.speedModifier * this.auk.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                    if (this.auk.isInWater()) {
+                        this.auk.setSpeed(f1 * 0.02F);
+                        float f2 = -((float)(MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
+                        f2 = MathHelper.clamp(MathHelper.wrapDegrees(f2), -85.0F, 85.0F);
+                        this.auk.xRot = this.rotlerp(this.auk.xRot, f2, 5.0F);
+                        float f3 = MathHelper.cos(this.auk.xRot * ((float)Math.PI / 180F));
+                        float f4 = MathHelper.sin(this.auk.xRot * ((float)Math.PI / 180F));
+                        this.auk.zza = f3 * f1;
+                        this.auk.yya = -f4 * f1;
+                    } else {
+                        this.auk.setSpeed(f1 * 0.45F);
+                    }
+
+                }
             } else {
                 this.auk.setSpeed(0.0F);
+                this.auk.setXxa(0.0F);
+                this.auk.setYya(0.0F);
+                this.auk.setZza(0.0F);
             }
         }
     }

@@ -8,6 +8,7 @@ import coda.forgottenfauna.init.FFSounds;
 import coda.forgottenfauna.common.world.ResurrectionEventCapability;
 import coda.forgottenfauna.common.world.ResurrectionEventHandler;
 import coda.forgottenfauna.init.FFTags;
+import coda.weecore.common.items.WCSpawnEggItem;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -57,6 +58,8 @@ public class ForgottenFauna {
         EntitySpawnPlacementRegistry.register(FFEntities.DODO.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::checkAnimalSpawnRules);
         EntitySpawnPlacementRegistry.register(FFEntities.BAIJI.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, BaijiEntity::canBaijiSpawn);
         EntitySpawnPlacementRegistry.register(FFEntities.STELLERS_SEA_COW.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, BaijiEntity::canBaijiSpawn);
+
+        event.enqueueWork((Runnable) WCSpawnEggItem::addEggsToMap);
     }
 
     private void registerBiomes(BiomeLoadingEvent event) {
